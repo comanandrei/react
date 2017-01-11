@@ -4,6 +4,7 @@
 import React from "react";
 
 import Todo from "../components/Todo";
+import * as TodoActions from "../actions/TodosActions";
 import TodoStore from "../stores/TodoStore";
 
 export default class Featured extends React.Component {
@@ -16,6 +17,18 @@ export default class Featured extends React.Component {
         };
     }
 
+    componentWillMount() {
+        TodoStore.on("change", () => {
+            this.setState({
+                todos: TodoStore.getAll()
+            });
+        });
+    }
+
+    reloadTodos() {
+        TodoActions.reloadTodos();
+    }
+
     render() {
         const {todos} = this.state;
 
@@ -26,6 +39,8 @@ export default class Featured extends React.Component {
         return (
             <div>
                 <div class="row">
+                    <button onClick={this.reloadTodos.bind(this)}>Reload!</button>
+                    <input />
                     <h1>Todos</h1>
                     <ul>{TodoComponents}</ul>
                 </div>
